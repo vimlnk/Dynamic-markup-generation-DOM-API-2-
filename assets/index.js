@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 const neww = {
   title: `Minecraft's new frogs were briefly swallowing goats whole`,
@@ -8,47 +8,71 @@ const neww = {
   date: "2025-02-01",
 };
 
-const newsElement = document.createElement("section");
-newsElement.classList.add("newsContainer");
-document.body.append(newsElement);
+const newEl = createNewsElement(neww);
 
-const newsElementHeader = document.createElement("section");
-newsElementHeader.classList.add("newsHeader");
-newsElementHeader.style.backgroundImage = `url("${neww.headerBgSrc}")`;
-newsElement.append(newsElementHeader);
+function createNewsElement(e) {
+  const newsElement = document.createElement("section");
+  newsElement.classList.add("newsContainer");
+  document.body.append(newsElement);
+  
+  createNewsHeader(e);
+  createNewsInfo(e);
 
-const newsTitle = document.createElement("h2");
-newsTitle.classList.add("title");
-newsTitle.textContent = `${neww.title}`;
-newsElementHeader.append(newsTitle);
+  function createNewsHeader({ title, headerBgSrc }) {
+    const newsElementHeader = document.createElement("section");
+    newsElementHeader.classList.add("newsHeader");
+    newsElementHeader.style.backgroundImage = `url("${headerBgSrc}")`;
+    newsElement.append(newsElementHeader);
 
-const deleteBtn = document.createElement("button");
-deleteBtn.classList.add("trashBtn");
-function deleteNew(e) {
-  newsElement.remove();
+    createNewsTitle({ title });
+    createDeleteBtn();
+
+    function createNewsTitle({ title }) {
+      const newsTitle = document.createElement("h2");
+      newsTitle.classList.add("title");
+      newsTitle.textContent = `${title}`;
+      newsElementHeader.append(newsTitle);
+      return newsTitle;
+    }
+
+    function createDeleteBtn(e) {
+      const deleteBtn = document.createElement("button");
+      deleteBtn.classList.add("trashBtn");
+      newsElementHeader.append(deleteBtn);
+
+      const trashIcon = document.createElement("i");
+      trashIcon.classList.add("fa-solid");
+      trashIcon.classList.add("fa-trash");
+      trashIcon.classList.add("trashIcon");
+      deleteBtn.append(trashIcon);
+
+      function deleteNew(e) {
+        newsElement.remove();
+      }
+
+      deleteBtn.onclick = deleteNew;
+
+      return deleteBtn;
+    }
+    return newsElementHeader;
+  }
+
+  function createNewsInfo({ category, body, date }) {
+    const newsCategory = document.createElement("p");
+    newsCategory.classList.add("category");
+    newsCategory.textContent = `${category}`;
+    newsElement.append(newsCategory);
+
+    const newsCategoryBody = document.createElement("p");
+    newsCategoryBody.classList.add("body");
+    newsCategoryBody.textContent = `${body}`;
+    newsElement.append(newsCategoryBody);
+
+    const newsDate = document.createElement("p");
+    newsDate.classList.add("date");
+    newsDate.textContent = `${date}`;
+    newsElement.append(newsDate);
+    return (newsCategory, newsCategoryBody, newsDate);
+  }
+  return newsElement;
 }
-deleteBtn.onclick = deleteNew;
-
-newsElementHeader.append(deleteBtn);
-
-const trashIcon = document.createElement("i");
-trashIcon.classList.add("fa-solid");
-trashIcon.classList.add("fa-trash");
-trashIcon.classList.add("trashIcon");
-deleteBtn.append(trashIcon);
-
-
-const newsCategory = document.createElement("p");
-newsCategory.classList.add("category");
-newsCategory.textContent = `${neww.category}`;
-newsElement.append(newsCategory);
-
-const newsCategoryBody = document.createElement("p");
-newsCategoryBody.classList.add("body");
-newsCategoryBody.textContent = `${neww.body}`;
-newsElement.append(newsCategoryBody);
-
-const newsDate = document.createElement("p");
-newsDate.classList.add("date");
-newsDate.textContent = `${neww.date}`;
-newsElement.append(newsDate);
